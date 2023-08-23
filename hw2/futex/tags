@@ -1,0 +1,92 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALL	Makefile	/^ALL := test_pthread test_linux$/;"	m
+CFLAGS	Makefile	/^CFLAGS := -std=c11 -Wall -g -O2 -D_GNU_SOURCE -fsanitize=thread$/;"	m
+COND_INITIALIZER	cond.h	9;"	d
+COND_SPINS	cond.h	38;"	d
+LDFLAGS	Makefile	/^LDFLAGS := -lpthread$/;"	m
+MUTEX_INITIALIZER	mutex.h	30;"	d
+MUTEX_INITIALIZER	mutex.h	9;"	d
+MUTEX_LOCKED	mutex.h	/^    MUTEX_LOCKED = 1 << 0,$/;"	e	enum:__anon4
+MUTEX_SLEEPING	mutex.h	/^    MUTEX_SLEEPING = 1 << 1,$/;"	e	enum:__anon4
+MUTEX_SPINS	mutex.h	56;"	d
+NAME_S	Makefile	/^NAME_S := $(shell uname -s)$/;"	m
+NO_COLOR	Makefile	/^NO_COLOR = \\e[0m$/;"	m
+N_NODES	main.c	112;"	d	file:
+PASS_COLOR	Makefile	/^PASS_COLOR = \\e[32;01m$/;"	m
+PRINTF	Makefile	/^    PRINTF = env printf$/;"	m
+PRINTF	Makefile	/^    PRINTF = printf$/;"	m
+SPINLOCK_INITIALIZER	spinlock.h	10;"	d
+TSAN	atomic.h	40;"	d
+TSAN	atomic.h	42;"	d
+atomic	atomic.h	5;"	d
+clock	main.c	/^    struct clock *clock;$/;"	m	struct:node	typeref:struct:node::clock	file:
+clock	main.c	/^struct clock {$/;"	s	file:
+clock_init	main.c	/^static void clock_init(struct clock *clock)$/;"	f	file:
+clock_stop	main.c	/^static void clock_stop(struct clock *clock)$/;"	f	file:
+clock_tick	main.c	/^static void clock_tick(struct clock *clock)$/;"	f	file:
+clock_wait	main.c	/^static bool clock_wait(struct clock *clock, int ticks)$/;"	f	file:
+compare_exchange_strong	atomic.h	19;"	d
+compare_exchange_weak	atomic.h	15;"	d
+cond	main.c	/^    cond_t cond;$/;"	m	struct:clock	file:
+cond	main.c	/^    cond_t cond;$/;"	m	struct:node	file:
+cond_broadcast	cond.h	/^static inline void cond_broadcast(cond_t *cond, mutex_t *mutex)$/;"	f
+cond_broadcast	cond.h	12;"	d
+cond_init	cond.h	/^static inline void cond_init(cond_t *cond)$/;"	f
+cond_init	cond.h	8;"	d
+cond_signal	cond.h	/^static inline void cond_signal(cond_t *cond, mutex_t *mutex)$/;"	f
+cond_signal	cond.h	11;"	d
+cond_t	cond.h	/^} cond_t;$/;"	t	typeref:struct:__anon2
+cond_t	cond.h	7;"	d
+cond_wait	cond.h	/^static inline void cond_wait(cond_t *cond, mutex_t *mutex)$/;"	f
+cond_wait	cond.h	10;"	d
+exchange	atomic.h	12;"	d
+fetch_add	atomic.h	23;"	d
+fetch_and	atomic.h	35;"	d
+fetch_or	atomic.h	29;"	d
+fetch_sub	atomic.h	26;"	d
+fetch_xor	atomic.h	32;"	d
+futex_requeue	futex.h	/^static inline void futex_requeue(atomic int *futex,$/;"	f
+futex_wait	futex.h	/^static inline void futex_wait(atomic int *futex, int value)$/;"	f
+futex_wake	futex.h	/^static inline void futex_wake(atomic int *futex, int limit)$/;"	f
+load	atomic.h	7;"	d
+main	main.c	/^int main(void)$/;"	f
+mutex	main.c	/^    mutex_t mutex;$/;"	m	struct:clock	file:
+mutex	main.c	/^    mutex_t mutex;$/;"	m	struct:node	file:
+mutex_init	mutex.h	/^static inline void mutex_init(mutex_t *mutex)$/;"	f
+mutex_init	mutex.h	8;"	d
+mutex_lock	mutex.h	/^static inline void mutex_lock(mutex_t *mutex)$/;"	f
+mutex_lock	mutex.h	11;"	d
+mutex_t	mutex.h	/^} mutex_t;$/;"	t	typeref:struct:__anon3
+mutex_t	mutex.h	7;"	d
+mutex_trylock	mutex.h	/^static bool mutex_trylock(mutex_t *mutex)$/;"	f
+mutex_trylock	mutex.h	10;"	d
+mutex_unlock	mutex.h	/^static inline void mutex_unlock(mutex_t *mutex)$/;"	f
+mutex_unlock	mutex.h	12;"	d
+node	main.c	/^struct node {$/;"	s	file:
+node_init	main.c	/^static void node_init(struct clock *clock,$/;"	f	file:
+node_signal	main.c	/^static void node_signal(struct node *node)$/;"	f	file:
+node_wait	main.c	/^static void node_wait(struct node *node)$/;"	f	file:
+notice	Makefile	/^notice = $(PRINTF) "$(PASS_COLOR)$(strip $1)$(NO_COLOR)\\n"$/;"	m
+parent	main.c	/^    struct node *parent;$/;"	m	struct:node	typeref:struct:node::node	file:
+ready	main.c	/^    bool ready;$/;"	m	struct:node	file:
+seq	cond.h	/^    atomic int seq;$/;"	m	struct:__anon2
+spin_hint	spinlock.h	33;"	d
+spin_hint	spinlock.h	35;"	d
+spin_hint	spinlock.h	37;"	d
+spin_init	spinlock.h	/^static inline void spin_init(spinlock_t *lock)$/;"	f
+spin_lock	spinlock.h	/^static inline void spin_lock(spinlock_t *lock)$/;"	f
+spin_trylock	spinlock.h	/^static inline bool spin_trylock(spinlock_t *lock)$/;"	f
+spin_unlock	spinlock.h	/^static inline void spin_unlock(spinlock_t *lock)$/;"	f
+spinlock_t	spinlock.h	/^} spinlock_t;$/;"	t	typeref:struct:__anon1
+state	mutex.h	/^    atomic int state;$/;"	m	struct:__anon3
+state	spinlock.h	/^    atomic bool state;$/;"	m	struct:__anon1
+store	atomic.h	9;"	d
+thread_fence	atomic.h	46;"	d
+thread_fence	atomic.h	48;"	d
+thread_func	main.c	/^static void *thread_func(void *ptr)$/;"	f	file:
+ticks	main.c	/^    int ticks;$/;"	m	struct:clock	file:
