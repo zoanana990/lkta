@@ -3,6 +3,7 @@
 #include "mutex.h"
 
 mutex_t common_lock;
+int     common_resource = 0;
 
 enum {
     PRIORITY_LOW = 0,
@@ -10,30 +11,38 @@ enum {
     PRIORITY_HIGH = 2
 };
 
-void task1()
+void* task1()
 {
     mutex_lock_pi(&common_lock);
     printf("Low Priority Task is running\n");
+    common_resource = gettid();
+    printf("low priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
+    return NULL;
 }
 
-void task2()
+void* task2()
 {
     /* try to access the lock, cannot execute first */
     mutex_lock_pi(&common_lock);
     printf("Med Priority Task is running\n");
+    common_resource = gettid();
+    printf("medium priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
+    return NULL;
 }
 
-void task3()
+void* task3()
 {
-    printf("r\nm");
     mutex_lock_pi(&common_lock);
     printf("High Priority Task is running\n");
+    common_resource = gettid();
+    printf("high priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
+    return NULL;
 }
 
-static void (*TASKS[])() = {task1, task2, task3};
+static void *(*TASKS[])() = {task1, task2, task3};
 
 #define THREAD_N 3
 
@@ -74,14 +83,19 @@ int main()
 
     for(int i=0; i<THREAD_N; i++)
     {
-        int priority = (i % THREAD_N) * 10 + 10;
+        int priority = (i % THREAD_N) + 10;
         param.sched_priority = priority;
         pthread_attr_setschedparam (&attr, &param);
         
         /* Some pthread attribute allocate */
         pthread_create(&thread[i], &attr, (void *)TASKS[i], NULL);
     }
+    // pthread_create(&thread[0], &attr, (void *)task1, NULL);
 
+    for (int i = 0; i < THREAD_N; ++i) {
+        if (pthread_join(thread[i], NULL) != 0)
+            goto error;
+    }
     return 0;
 error:
     printf("Priroity Inheritance test failed\n");

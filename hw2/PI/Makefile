@@ -16,7 +16,7 @@ NO_COLOR = \e[0m
 notice = $(PRINTF) "$(PASS_COLOR)$(strip $1)$(NO_COLOR)\n"
 
 check: all
-	./test
+	sudo ./test
 
 clean:
 	$(RM) ./test
