@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
-#include "mutex.h"
+#include "../mutex.h"
 
 mutex_t common_lock;
 int     common_resource = 0;
@@ -15,7 +15,7 @@ void* task1()
 {
     mutex_lock_pi(&common_lock);
     printf("Low Priority Task is running\n");
-    common_resource = gettid();
+    common_resource = 1;
     printf("low priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
     return NULL;
@@ -26,7 +26,7 @@ void* task2()
     /* try to access the lock, cannot execute first */
     mutex_lock_pi(&common_lock);
     printf("Med Priority Task is running\n");
-    common_resource = gettid();
+    common_resource = 2;
     printf("medium priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
     return NULL;
@@ -36,7 +36,7 @@ void* task3()
 {
     mutex_lock_pi(&common_lock);
     printf("High Priority Task is running\n");
-    common_resource = gettid();
+    common_resource = 3;
     printf("high priority tid = %d\n", common_resource);
     mutex_unlock_pi(&common_lock);
     return NULL;

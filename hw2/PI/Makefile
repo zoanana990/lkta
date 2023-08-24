@@ -26,7 +26,7 @@ notice = $(PRINTF) "$(PASS_COLOR)$(strip $1)$(NO_COLOR)\n"
 check: $(ALL)
 	@$(foreach t,$^,\
 	    $(PRINTF) "Running $(t) ... "; \
-	    ./$(t) && $(call notice, [OK]); \
+	    sudo ./$(t) && $(call notice, [OK]); \
 	)
 
 clean:
