@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
     bool opt_verify = false;
     bool opt_libc = false;
     int ch, i;
-    size_t nelem = 50000000;
+    size_t nelem = 10000000;
     int threads = 2;
     int forkelements = 100;
     ELEM_T *int_elem;

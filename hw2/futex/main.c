@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "cond.h"
-#include "futex.h"
-#include "mutex.h"
+#include "../cond.h"
+#include "../futex.h"
+#include "../mutex.h"
 
 struct clock {
     mutex_t mutex;
@@ -122,7 +122,6 @@ int main(void)
             return EXIT_FAILURE;
     }
 
-    printf("main\n");
     clock_tick(&clock);
     clock_wait(&clock, 1 << N_NODES);
     clock_stop(&clock);

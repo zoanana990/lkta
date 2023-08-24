@@ -1,5 +1,7 @@
 #pragma once
 
+#if USE_LINUX
+
 #include <limits.h>
 #include <linux/futex.h>
 #include <sys/syscall.h>
@@ -24,3 +26,22 @@ static inline void futex_requeue(atomic int *futex,
 {
     syscall(SYS_futex, futex, FUTEX_REQUEUE_PRIVATE, limit, INT_MAX, other);
 }
+
+/* Returns 0 if the futex was successfully locked. */
+static inline int futex_trylock_pi(atomic int *futex)
+{
+    return syscall(SYS_futex, futex, FUTEX_TRYLOCK_PI);
+}
+
+/* Returns 0 if the futex was successfully locked. */
+static inline int  futex_lock_pi(atomic int *futex)
+{
+    return syscall(SYS_futex, futex, FUTEX_LOCK_PI);
+}
+
+/* Returns 0 if the futex was successfully unlocked. */
+static inline int  futex_unlock_pi(atomic int *futex)
+{
+    return syscall(SYS_futex, futex, FUTEX_UNLOCK_PI);
+}
+#endif

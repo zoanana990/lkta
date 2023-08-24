@@ -1,5 +1,18 @@
 #pragma once
 
+#if USE_PTHREADS
+
+#include <pthread.h>
+
+#define mutex_t pthread_mutex_t
+#define mutex_init(m) pthread_mutex_init(m, NULL)
+#define MUTEX_INITIALIZER PTHREAD_MUTEX_INITIALIZER
+#define mutex_trylock(m) (!pthread_mutex_trylock(m))
+#define mutex_lock pthread_mutex_lock
+#define mutex_unlock pthread_mutex_unlock
+
+#else
+
 #include <stdbool.h>
 #include "atomic.h"
 #include "futex.h"
@@ -63,3 +76,23 @@ static inline void mutex_unlock(mutex_t *mutex)
     if (state & MUTEX_SLEEPING)
         futex_wake(&mutex->state, 1);
 }
+
+static inline void mutex_lock_pi(mutex_t *mutex)
+{
+    /* try lock then lock */
+    if (!futex_trylock_pi(&mutex->state))
+        return;
+
+    /* try lock fail, futex_lock_pi() */
+    futex_lock_pi(&mutex->state);
+}
+
+static inline void mutex_unlock_pi(mutex_t *mutex)
+{
+    /* we need to let the state from the TID (of the owner) to 0 */
+    exchange(&mutex->state, gettid(), relaxed);
+
+    /* unlock */
+    futex_unlock_pi(&mutex->state);
+}
+#endif
