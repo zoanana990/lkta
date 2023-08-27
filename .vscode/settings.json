@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "__mutex_base": "c"
+        "__mutex_base": "c",
+        "mutex.h": "c",
+        "stdbool.h": "c",
+        "atomic.h": "c",
+        "futex.h": "c",
+        "spinlock.h": "c",
+        "random": "c"
     }
 }

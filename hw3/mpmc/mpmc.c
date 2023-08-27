@@ -1,6 +1,7 @@
 /* A multiple-producer/multiple-consumer queue
  * NOTE: dequeue operation would block if there is no element.
  */
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -133,7 +134,7 @@ static void *mpmc_find_cell(node_t *volatile *ptr, long i, handle_t *th)
                 th->spare = tmp;
             }
 
-            tmp->id = ZBBB; /* next node's id */
+            tmp->id = j + 1; /* next node's id */
 
             /* if true, then use this thread's node, else then thread has have
              * done this.
@@ -156,8 +157,8 @@ static void *mpmc_find_cell(node_t *volatile *ptr, long i, handle_t *th)
     /* Orders processor execution, so other thread can see the '*ptr = curr' */
     __atomic_thread_fence(__ATOMIC_SEQ_CST);
 
-    /* now we get the needed cell */
-    return &curr->cells[i & ZDDD];
+    /* now we get the needed cell, its' node is curr and index is i % N */
+    return &curr->cells[i & N_BITS];
 }
 
 #include <linux/futex.h>
@@ -180,7 +181,7 @@ void mpmc_enqueue(mpmc_t *q, handle_t *th, void *v)
 {
     /* return the needed index */
     void *volatile *c = mpmc_find_cell(
-            &th->push, __atomic_fetch_add(&q->put_index, 1, __ATOMIC_SEQ_CST), th);
+        &th->push, __atomic_fetch_add(&q->put_index, 1, __ATOMIC_SEQ_CST), th);
     /* __atomic_fetch_add(ptr, val) is an atomic fetch-and-add that also
      * ensures sequential consistency
      */
@@ -195,9 +196,9 @@ void mpmc_enqueue(mpmc_t *q, handle_t *th, void *v)
         return;
 
     /* else the counterpart pop thread has wait this cell, so we just change the
-     * waiting value and wake it
+     * waiting value to 0 and wake it
      */
-    *((int *) cv) = ZAAA;
+    *((int *) cv) = 0;
     mpmc_futex_wake(cv, 1);
 }
 
@@ -207,7 +208,7 @@ void *mpmc_dequeue(mpmc_t *q, handle_t *th)
     int futex_addr = 1;
 
     /* the needed pop_index */
-    long index = __atomic_fetch_add(&q->pop_index, ZCCC, __ATOMIC_SEQ_CST);
+    long index = __atomic_fetch_add(&q->pop_index, 1, __ATOMIC_SEQ_CST);
 
     /* locate the needed cell */
     void *volatile *c = mpmc_find_cell(&th->pop, index, th);
@@ -242,7 +243,7 @@ void *mpmc_dequeue(mpmc_t *q, handle_t *th)
         cv = *c;
     }
 
-    over:
+over:
     /* if the index is the node's last cell: (N_BITS == 4095), it Try to reclaim
      * the memory. so we just take the smallest ID node that is not
      * reclaimed(init_node), and At the same time, by traversing the local data
@@ -328,7 +329,7 @@ static void *producer(void *index)
         pthread_barrier_wait(&prod_barrier);
         for (int i = 0; i < COUNTS_PER_THREAD; ++i)
             mpmc_enqueue(
-                    q, th, (void *) 1 + i + ((intptr_t) index) * COUNTS_PER_THREAD);
+                q, th, (void *) 1 + i + ((intptr_t) index) * COUNTS_PER_THREAD);
         pthread_barrier_wait(&prod_barrier);
     }
     return NULL;

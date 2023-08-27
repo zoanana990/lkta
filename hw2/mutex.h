@@ -10,7 +10,8 @@
 #define mutex_trylock(m) (!pthread_mutex_trylock(m))
 #define mutex_lock pthread_mutex_lock
 #define mutex_unlock pthread_mutex_unlock
-
+#define mutex_lock_pi pthread_mutex_lock
+#define mutex_unlock_pi pthread_mutex_unlock
 #else
 
 #include <stdbool.h>
